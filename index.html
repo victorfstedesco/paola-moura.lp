@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Paola Moura · Psicoterapia para adultos e casais</title>
+  <meta name="description" content="Psicoterapia para adultos e casais: relacionamentos, autoestima, ansiedade, fobias e terapia EMDR. Abordagem Cognitivo-Comportamental, presencial e online." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@400;500&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            // Paleta análoga quente (terracota → âmbar) sobre papel; sálvia só como respiro.
+            papel:     { DEFAULT: '#F2EBE1', 50: '#F8F4EE', 200: '#E6DACB' },
+            tinta:     { DEFAULT: '#241C19', soft: '#554842', mute: '#8C7D74' },
+            terracota: { DEFAULT: '#A85B3F', light: '#C98466', pale: '#EBD3C6' },
+            salvia:    { dark: '#5E6C58' },
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['Jost', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    body { background: #F2EBE1; }
+
+    .kicker { font-size: 13px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
+
+    /* Tratamento de imagem: P&B = desconexão · quente = conexão */
+    .tone-warm img { filter: sepia(.2) saturate(.85) contrast(1.03) brightness(.97); }
+    .tone-mono img { filter: grayscale(1) sepia(.1) contrast(1.06); }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+    .reveal.is-in { opacity: 1; transform: none; }
+    .d1 { transition-delay: .1s; } .d2 { transition-delay: .2s; } .d3 { transition-delay: .3s; }
+
+    /* Seta de traço fino, a única "iconografia" do site */
+    .arw { position: relative; display: inline-block; width: 24px; height: 1px; background: currentColor; vertical-align: middle; transition: width .4s cubic-bezier(.2,.7,.2,1); }
+    .arw::after { content: ''; position: absolute; right: 0; top: -3px; width: 7px; height: 7px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; transform: rotate(45deg); }
+    .group:hover .arw { width: 36px; }
+
+    /* Risco à mão sobre "louça" */
+    .scribble path { stroke-dasharray: 260; stroke-dashoffset: 260; transition: stroke-dashoffset 1.1s cubic-bezier(.6,.1,.3,1) .8s; }
+    .is-in .scribble path { stroke-dashoffset: 0; }
+
+    /* Dicionário */
+    .phrase[aria-pressed="true"] { color: #F2EBE1; border-color: #C98466; }
+
+    /* Checklist */
+    .sign .box::after { content: ''; position: absolute; left: 5px; top: 1px; width: 6px; height: 11px; border: solid #F8F4EE; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg) scale(0); transition: transform .2s ease; }
+    .sign[aria-pressed="true"] .box { background: #A85B3F; border-color: #A85B3F; }
+    .sign[aria-pressed="true"] .box::after { transform: rotate(45deg) scale(1); }
+    .sign[aria-pressed="true"] .sign-text { color: #241C19; }
+
+    /* Ciclo */
+    #cycleMarker { transform-origin: 220px 220px; transform-box: view-box; transition: transform 1s cubic-bezier(.5,0,.2,1); }
+    .step-tab[aria-selected="true"] { color: #A85B3F; border-color: #A85B3F; }
+
+    /* FAQ */
+    details > summary { list-style: none; } details > summary::-webkit-details-marker { display: none; }
+    .cross { position: relative; width: 12px; height: 12px; flex-shrink: 0; margin-top: .5em; }
+    .cross::before, .cross::after { content: ''; position: absolute; background: currentColor; transition: transform .3s ease; }
+    .cross::before { left: 0; right: 0; top: 50%; height: 1px; }
+    .cross::after { top: 0; bottom: 0; left: 50%; width: 1px; }
+    details[open] .cross::after { transform: scaleY(0); }
+
+    /* EMDR: ponto em movimento bilateral, o próprio método em miniatura */
+    @keyframes bilateral { from { left: 0; } to { left: calc(100% - 12px); } }
+    .bilateral-dot { animation: bilateral 1.6s ease-in-out infinite alternate; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .scribble path { stroke-dashoffset: 0; transition: none; }
+      .bilateral-dot { animation: none; left: calc(50% - 6px); }
+    }
+  </style>
+</head>
+
+<body class="font-sans text-[17px] leading-relaxed text-tinta antialiased selection:bg-terracota-pale">
+
+  <!-- HEADER -->
+  <header id="header" class="fixed inset-x-0 top-0 z-50 transition-colors duration-500">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 md:px-10">
+      <a href="#topo" class="font-display text-2xl font-medium">Paola Moura</a>
+      <nav class="hidden items-center gap-10 text-[15px] text-tinta-soft md:flex">
+        <a href="#ciclo" class="transition hover:text-tinta">Casal</a>
+        <a href="#individual" class="transition hover:text-tinta">Individual</a>
+        <a href="#emdr" class="transition hover:text-tinta">EMDR</a>
+        <a href="#sobre" class="transition hover:text-tinta">Sobre</a>
+        <a href="#" data-wa class="group flex items-center gap-3 text-tinta">Agendar conversa <span class="arw"></span></a>
+      </nav>
+      <button id="menuBtn" class="text-[15px] md:hidden" aria-expanded="false" aria-controls="mobileMenu">Menu</button>
+    </div>
+  </header>
+
+  <!-- Menu mobile -->
+  <div id="mobileMenu" class="fixed inset-0 z-[45] hidden flex-col bg-papel px-6 pb-10 pt-28">
+    <nav class="flex flex-1 flex-col gap-2 font-display text-4xl">
+      <a href="#ciclo" class="py-2">Terapia de casal</a>
+      <a href="#individual" class="py-2">Terapia individual</a>
+      <a href="#emdr" class="py-2">EMDR</a>
+      <a href="#sobre" class="py-2">Sobre</a>
+      <a href="#duvidas" class="py-2">Dúvidas</a>
+    </nav>
+    <a href="#" data-wa class="group flex items-center justify-between bg-tinta px-6 py-5 text-papel">Agendar primeira conversa <span class="arw"></span></a>
+  </div>
+
+  <main id="topo">
+
+    <!-- HERO — o gancho: a briga nunca é sobre o assunto -->
+    <section class="pt-36 md:pt-48">
+      <div class="mx-auto grid max-w-6xl items-center gap-16 px-6 md:px-10 lg:grid-cols-12 lg:gap-12">
+        <div class="lg:col-span-7">
+          <p class="reveal kicker text-terracota">Psicoterapia para adultos e casais</p>
+          <h1 class="reveal d1 mt-6 font-display text-[3.2rem] leading-[1] tracking-[-.01em] sm:text-7xl lg:text-[5.6rem]">
+            Vocês não estão brigando por causa da
+            <span class="relative inline-block italic">louça<svg class="scribble absolute -left-[4%] top-[50%] h-[.4em] w-[108%] overflow-visible" viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M2 12 C 40 4, 70 16, 110 9 S 170 6, 198 11" fill="none" stroke="#A85B3F" stroke-width="2.4" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg></span>.
+          </h1>
+          <p class="reveal d2 mt-8 max-w-lg text-lg text-tinta-soft">
+            A briga quase nunca é sobre o assunto. É sobre aquilo que ninguém está conseguindo dizer por baixo dele.
+          </p>
+          <div class="reveal d3 mt-10 flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:gap-10">
+            <a href="#dicionario" class="group flex items-center gap-4 bg-tinta px-7 py-4 text-papel transition hover:bg-terracota">Descobrir o que está por baixo <span class="arw"></span></a>
+            <a href="#" data-wa class="text-tinta-soft underline decoration-tinta/30 underline-offset-[6px] transition hover:text-tinta hover:decoration-tinta">Já quero agendar</a>
+          </div>
+          <p class="reveal d3 mt-14 text-[15px] text-tinta-mute">Casal · Individual · Terapia EMDR — presencial e online</p>
+        </div>
+        <div class="reveal d2 tone-warm lg:col-span-5">
+          <img src="assets/img/hero-maos.webp" alt="Duas mãos se encontrando contra a luz dourada do fim de tarde" class="aspect-[4/5] w-full object-cover object-[62%_center]" fetchpriority="high" />
+        </div>
+      </div>
+    </section>
+
+    <!-- DICIONÁRIO — aha: a frase é um pedido disfarçado -->
+    <section id="dicionario" class="mt-32 bg-tinta py-32 text-papel md:mt-48 md:py-44">
+      <div class="mx-auto max-w-6xl px-6 md:px-10">
+        <p class="reveal kicker text-terracota-light">Faça o teste</p>
+        <h2 class="reveal d1 mt-6 max-w-3xl font-display text-[2.6rem] leading-[1.05] md:text-6xl">
+          Qual destas frases mais se repete <em class="text-terracota-light">aí dentro de casa?</em>
+        </h2>
+
+        <div class="mt-20 grid gap-16 lg:grid-cols-12 lg:gap-12">
+          <div id="phrases" class="reveal d2 flex flex-col lg:col-span-5"></div>
+
+          <div class="lg:col-span-6 lg:col-start-7">
+            <div id="entry" class="lg:sticky lg:top-32" aria-live="polite">
+              <p id="entryEmpty" class="font-display text-3xl italic text-papel/40">Escolha uma frase ao lado.</p>
+              <div id="entryFull" class="hidden">
+                <p id="said" class="text-lg text-papel/50 line-through decoration-terracota-light/70"></p>
+                <p class="mt-8 text-[15px] text-terracota-light">O que, quase sempre, se quer dizer:</p>
+                <p id="meant" class="mt-3 font-display text-4xl leading-[1.15] md:text-5xl"></p>
+                <p class="mt-12 max-w-md text-papel/70">
+                  A frase sai como ataque, mas nasce como pedido. O outro escuta o ataque, se defende, e o pedido se perde no caminho.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SINAIS — reconhecimento ativo -->
+    <section id="sinais" class="py-32 md:py-48">
+      <div class="mx-auto grid max-w-6xl gap-16 px-6 md:px-10 lg:grid-cols-12 lg:gap-12">
+        <div class="lg:col-span-5">
+          <div class="reveal tone-mono lg:sticky lg:top-32">
+            <img src="assets/img/casal-distante.webp" alt="Casal sentado em pontas opostas do sofá, cada um olhando o próprio celular" loading="lazy" class="aspect-[4/3] w-full object-cover" />
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 lg:col-start-7">
+          <h2 class="reveal font-display text-[2.6rem] leading-[1.05] md:text-6xl">
+            Vocês ainda se amam. <em class="text-terracota">Só não estão mais se encontrando.</em>
+          </h2>
+          <p class="reveal d1 mt-6 text-tinta-soft">Marque o que soa familiar.</p>
+
+          <div id="signs" class="reveal d2 mt-10"></div>
+
+          <p id="signMsg" class="reveal mt-10 min-h-[3.5rem] max-w-md text-lg text-tinta" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CICLO — aha central (TCC sem jargão) -->
+    <section id="ciclo" class="bg-papel-50 py-32 md:py-48">
+      <div class="mx-auto max-w-6xl px-6 md:px-10">
+        <h2 class="reveal mx-auto max-w-4xl text-center font-display text-[2.4rem] leading-[1.08] md:text-6xl">
+          Não é o amor que sustenta a relação. <em class="text-terracota">É o jeito de se relacionar que sustenta o amor.</em>
+        </h2>
+        <p class="reveal d1 mx-auto mt-8 max-w-xl text-center text-lg text-tinta-soft">
+          E esse jeito segue sempre o mesmo roteiro. Veja como ele roda sozinho:
+        </p>
+
+        <div class="reveal d2 mx-auto mt-20 max-w-xl">
+          <div class="relative mx-auto aspect-square w-full max-w-[380px]">
+            <svg viewBox="0 0 440 440" class="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
+              <circle cx="220" cy="220" r="190" fill="none" stroke="#241C19" stroke-opacity=".18" stroke-width="1"/>
+              <g fill="none" stroke="#241C19" stroke-opacity=".35" stroke-width="1">
+                <path d="M-4 -4 L0 0 L-4 4" transform="translate(354.4 85.6) rotate(45)"/>
+                <path d="M-4 -4 L0 0 L-4 4" transform="translate(354.4 354.4) rotate(135)"/>
+                <path d="M-4 -4 L0 0 L-4 4" transform="translate(85.6 354.4) rotate(225)"/>
+                <path d="M-4 -4 L0 0 L-4 4" transform="translate(85.6 85.6) rotate(315)"/>
+              </g>
+              <g id="cycleMarker"><circle cx="220" cy="30" r="7" fill="#A85B3F"/></g>
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center px-16 text-center">
+              <p id="cycleText" class="font-display text-[1.6rem] italic leading-snug md:text-3xl"></p>
+            </div>
+          </div>
+
+          <div class="mt-14 grid grid-cols-4" role="tablist" aria-label="Etapas do ciclo">
+            <button class="step-tab border-t border-tinta/15 pt-4 text-[14px] text-tinta-mute transition hover:text-tinta sm:text-[15px]" role="tab">Situação</button>
+            <button class="step-tab border-t border-tinta/15 pt-4 text-[14px] text-tinta-mute transition hover:text-tinta sm:text-[15px]" role="tab">Pensamento</button>
+            <button class="step-tab border-t border-tinta/15 pt-4 text-[14px] text-tinta-mute transition hover:text-tinta sm:text-[15px]" role="tab">Emoção</button>
+            <button class="step-tab border-t border-tinta/15 pt-4 text-[14px] text-tinta-mute transition hover:text-tinta sm:text-[15px]" role="tab">Reação</button>
+          </div>
+        </div>
+
+        <p class="reveal mx-auto mt-20 max-w-xl text-center text-tinta-soft">
+          O problema não está em uma pessoa. Está no ciclo entre as duas. É nele que a Terapia Cognitivo-Comportamental trabalha:
+          identificar os pensamentos automáticos e trocar a reação de sempre por uma nova.
+        </p>
+
+        <p class="reveal mx-auto mt-32 max-w-3xl text-center font-display text-[2.2rem] leading-[1.1] md:text-5xl">
+          Padrões são aprendidos. <em class="text-salvia-dark">E tudo o que se aprende pode ser reaprendido.</em>
+        </p>
+      </div>
+    </section>
+
+    <!-- PROCESSO — tirar o medo do primeiro passo -->
+    <section id="processo" class="py-32 md:py-48">
+      <div class="mx-auto max-w-6xl px-6 md:px-10">
+        <p class="reveal kicker text-terracota">Terapia de casal</p>
+        <h2 class="reveal d1 mt-6 max-w-3xl font-display text-[2.6rem] leading-[1.05] md:text-6xl">
+          Aqui ninguém vai decidir <em class="text-terracota">quem tem razão.</em>
+        </h2>
+        <p class="reveal d2 mt-8 max-w-xl text-lg text-tinta-soft">
+          Terapia de casal não é tribunal. Eu não estou do lado de nenhum de vocês. Estou do lado da relação.
+        </p>
+
+        <div class="mt-20 grid gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
+          <div class="reveal border-t border-tinta/20 pt-6">
+            <h3 class="font-display text-2xl">Primeira conversa</h3>
+            <p class="mt-3 text-tinta-soft">Vocês contam o que está acontecendo, sem julgamento. Eu escuto os dois lados com o mesmo cuidado.</p>
+          </div>
+          <div class="reveal d1 border-t border-tinta/20 pt-6">
+            <h3 class="font-display text-2xl">O mapa do ciclo</h3>
+            <p class="mt-3 text-tinta-soft">Entendemos juntos o padrão de vocês: o que dispara a briga e o que cada um pensa, sente e faz.</p>
+          </div>
+          <div class="reveal d2 border-t border-tinta/20 pt-6">
+            <h3 class="font-display text-2xl">Novas ferramentas</h3>
+            <p class="mt-3 text-tinta-soft">Técnicas práticas de comunicação para testar em casa entre as sessões.</p>
+          </div>
+          <div class="reveal d3 border-t-2 border-terracota pt-6">
+            <h3 class="font-display text-2xl text-terracota">Um novo jeito</h3>
+            <p class="mt-3 text-tinta-soft">A conversa difícil deixa de virar briga. E vocês voltam a se sentir do mesmo lado.</p>
+          </div>
+        </div>
+
+        <a href="#" data-wa="casal" class="reveal group mt-16 inline-flex items-center gap-4 text-terracota">Agendar terapia de casal <span class="arw"></span></a>
+      </div>
+    </section>
+
+    <!-- INDIVIDUAL — "você pode começar sozinho" abre as demandas de adultos -->
+    <section id="individual" class="bg-papel-50 py-32 md:py-48">
+      <div class="mx-auto grid max-w-6xl gap-16 px-6 md:px-10 lg:grid-cols-12 lg:gap-12">
+        <div class="lg:col-span-5">
+          <div class="reveal tone-warm lg:sticky lg:top-32">
+            <img src="assets/img/porta-individual.webp" alt="Mulher olhando pela janela, pensativa" loading="lazy" class="aspect-[4/5] w-full object-cover" />
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 lg:col-start-7">
+          <p class="reveal kicker text-terracota">Terapia individual para adultos</p>
+          <h2 class="reveal d1 mt-6 font-display text-[2.6rem] leading-[1.05] md:text-6xl">
+            E se o outro não quiser vir? <em class="text-terracota">Você pode começar sozinho.</em>
+          </h2>
+          <p class="reveal d2 mt-8 text-lg text-tinta-soft">
+            Quando uma pessoa muda a forma de reagir, o ciclo inteiro já não roda do mesmo jeito.
+            E nem tudo o que pesa é a relação. No atendimento individual, também cuido de:
+          </p>
+
+          <div class="mt-14">
+            <div class="reveal border-t border-tinta/15 py-7">
+              <h3 class="font-display text-3xl">Relacionamentos</h3>
+              <p class="mt-2 text-tinta-soft">Quando você escolhe, reage e se machuca sempre do mesmo jeito.</p>
+            </div>
+            <div class="reveal border-t border-tinta/15 py-7">
+              <h3 class="font-display text-3xl">Autoestima</h3>
+              <p class="mt-2 text-tinta-soft">Quando a voz mais dura com você é a sua.</p>
+            </div>
+            <div class="reveal border-t border-tinta/15 py-7">
+              <h3 class="font-display text-3xl">Ansiedade</h3>
+              <p class="mt-2 text-tinta-soft">Quando a cabeça não desliga e o corpo vive em alerta.</p>
+            </div>
+            <div class="reveal border-y border-tinta/15 py-7">
+              <h3 class="font-display text-3xl">Fobias</h3>
+              <p class="mt-2 text-tinta-soft">Quando o medo é maior que o perigo e começa a decidir por você.</p>
+            </div>
+          </div>
+
+          <a href="#" data-wa="individual" class="reveal group mt-12 inline-flex items-center gap-4 text-terracota">Agendar terapia individual <span class="arw"></span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- EMDR -->
+    <section id="emdr" class="bg-tinta py-32 text-papel md:py-48">
+      <div class="mx-auto grid max-w-6xl items-center gap-20 px-6 md:px-10 lg:grid-cols-12 lg:gap-12">
+        <div class="lg:col-span-7">
+          <p class="reveal kicker text-terracota-light">Terapia EMDR</p>
+          <h2 class="reveal d1 mt-6 font-display text-[2.6rem] leading-[1.05] md:text-6xl">
+            Algumas lembranças não ficaram no passado. <em class="text-terracota-light">Ainda doem como se fosse agora.</em>
+          </h2>
+          <p class="reveal d2 mt-8 max-w-xl text-lg text-papel/75">
+            O EMDR é uma abordagem reconhecida pela Organização Mundial da Saúde no tratamento de traumas.
+            Com estímulos bilaterais, como o movimento dos olhos, ele ajuda o cérebro a reprocessar memórias que ficaram presas,
+            para que possam ser lembradas sem a mesma carga de dor.
+          </p>
+          <p class="reveal d2 mt-5 max-w-xl text-lg text-papel/75">
+            Pode ajudar em traumas e perdas, ansiedade, fobias e memórias que ainda machucam.
+          </p>
+          <a href="#" data-wa="emdr" class="reveal d3 group mt-12 inline-flex items-center gap-4 bg-papel px-7 py-4 text-tinta transition hover:bg-terracota hover:text-papel">Quero saber se o EMDR é para mim <span class="arw"></span></a>
+        </div>
+
+        <div class="reveal d2 lg:col-span-4 lg:col-start-9">
+          <div class="relative h-3" aria-hidden="true">
+            <div class="absolute inset-x-0 top-1/2 h-px bg-papel/20"></div>
+            <div class="bilateral-dot absolute top-0 h-3 w-3 rounded-full bg-terracota-light"></div>
+          </div>
+          <p class="mt-8 text-[15px] text-papel/50">Siga o ponto com os olhos. Estímulos bilaterais como este fazem parte do método.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section id="sobre" class="py-32 md:py-48">
+      <div class="mx-auto grid max-w-6xl items-center gap-16 px-6 md:px-10 lg:grid-cols-12 lg:gap-12">
+        <!-- TODO: substituir pelo retrato da Dra. Paola (mesmo tratamento quente) -->
+        <div class="reveal flex aspect-[4/5] items-center justify-center bg-papel-200 lg:col-span-5">
+          <p class="text-[15px] text-tinta-mute">Foto da Dra. Paola</p>
+        </div>
+
+        <div class="lg:col-span-6 lg:col-start-7">
+          <p class="reveal kicker text-terracota">Prazer, eu sou a Paola</p>
+          <h2 class="reveal d1 mt-6 font-display text-[2.6rem] leading-[1.05] md:text-6xl">
+            Amor não é só sentimento. <em class="text-terracota">É uma decisão que se renova.</em>
+          </h2>
+          <div class="reveal d2 mt-10 space-y-5 text-lg text-tinta-soft">
+            <p>Sou psicóloga clínica e atendo adultos e casais. Trabalho com Terapia Cognitivo-Comportamental, terapia de casal e EMDR. E sou, sem exagero, apaixonada pelo que faço.</p>
+            <p>Meu trabalho é ajudar você a enxergar o que se repete, na relação ou dentro de você, e construir, com ferramentas concretas, um jeito novo de seguir.</p>
+          </div>
+          <p class="reveal d3 mt-10 text-[15px] text-tinta-mute">CRP 00/00000 · Atendimento presencial e online</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DÚVIDAS -->
+    <section id="duvidas" class="bg-papel-50 py-32 md:py-48">
+      <div class="mx-auto max-w-3xl px-6 md:px-10">
+        <h2 class="reveal font-display text-[2.6rem] leading-[1.05] md:text-6xl">Antes da primeira sessão</h2>
+        <div class="mt-14">
+          <details class="reveal border-t border-tinta/15 py-6">
+            <summary class="flex cursor-pointer items-start justify-between gap-8 text-lg font-medium">Preciso estar em crise para procurar terapia?<span class="cross text-terracota"></span></summary>
+            <p class="mt-3 max-w-xl text-tinta-soft">Não. Muita gente chega para cuidar antes que o problema cresça. Quanto mais cedo, mais leve costuma ser o caminho.</p>
+          </details>
+          <details class="reveal border-t border-tinta/15 py-6">
+            <summary class="flex cursor-pointer items-start justify-between gap-8 text-lg font-medium">E se a terapia mostrar que é melhor a gente se separar?<span class="cross text-terracota"></span></summary>
+            <p class="mt-3 max-w-xl text-tinta-soft">Meu papel não é salvar nem terminar relacionamentos. É ajudar vocês a decidirem com clareza, e não no meio de uma briga. Se a decisão for separar, a terapia ajuda a fazer isso com respeito, especialmente quando há filhos.</p>
+          </details>
+          <details class="reveal border-t border-tinta/15 py-6">
+            <summary class="flex cursor-pointer items-start justify-between gap-8 text-lg font-medium">Quanto tempo dura o processo?<span class="cross text-terracota"></span></summary>
+            <p class="mt-3 max-w-xl text-tinta-soft">Depende de cada história. A TCC e o EMDR são abordagens focadas e com objetivos claros, então você acompanha a evolução ao longo do caminho. Conversamos sobre isso logo no começo.</p>
+          </details>
+          <details class="reveal border-t border-tinta/15 py-6">
+            <summary class="flex cursor-pointer items-start justify-between gap-8 text-lg font-medium">Como é uma sessão de EMDR?<span class="cross text-terracota"></span></summary>
+            <p class="mt-3 max-w-xl text-tinta-soft">Antes de tudo, avaliamos juntos se o EMDR é indicado para o seu caso e preparamos o terreno. Nas sessões, você acessa uma lembrança difícil enquanto acompanha estímulos bilaterais, sempre no seu ritmo e sem perder o controle. Você não precisa contar detalhes que não quiser.</p>
+          </details>
+          <details class="reveal border-t border-tinta/15 py-6">
+            <summary class="flex cursor-pointer items-start justify-between gap-8 text-lg font-medium">Você atende crianças ou adolescentes?<span class="cross text-terracota"></span></summary>
+            <p class="mt-3 max-w-xl text-tinta-soft">Não. Meu atendimento é para adultos, individualmente, e para casais.</p>
+          </details>
+          <details class="reveal border-t border-tinta/15 py-6">
+            <summary class="flex cursor-pointer items-start justify-between gap-8 text-lg font-medium">O atendimento online funciona?<span class="cross text-terracota"></span></summary>
+            <p class="mt-3 max-w-xl text-tinta-soft">Funciona, e é ótimo para quem tem rotina corrida ou, no caso de casais, mora em cidades diferentes. Também atendo presencialmente.</p>
+          </details>
+          <details class="reveal border-y border-tinta/15 py-6">
+            <summary class="flex cursor-pointer items-start justify-between gap-8 text-lg font-medium">O que eu falar fica entre nós?<span class="cross text-terracota"></span></summary>
+            <p class="mt-3 max-w-xl text-tinta-soft">Sim. Todo o atendimento segue o Código de Ética do Psicólogo e é protegido por sigilo profissional.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- O COMEÇO — fecha o arco aberto no hero -->
+    <section id="agendar" class="relative overflow-hidden bg-tinta text-papel md:flex md:min-h-[90vh] md:items-center">
+      <div class="tone-warm h-[110vw] max-h-[560px] md:absolute md:inset-y-0 md:right-0 md:h-full md:max-h-none md:w-[55%]">
+        <img src="assets/img/casal-reconexao.webp" alt="Casal rindo junto, sentado no chão de casa" loading="lazy" class="h-full w-full object-cover object-[50%_26%]" />
+      </div>
+      <div class="absolute inset-0 hidden bg-gradient-to-r from-tinta from-[45%] to-transparent to-[62%] md:block"></div>
+
+      <div class="relative mx-auto w-full max-w-6xl px-6 py-20 md:px-10 md:py-32">
+        <div class="max-w-lg">
+          <h2 class="reveal font-display text-[2.8rem] leading-[1.02] md:text-6xl">
+            A conversa que você está adiando <em class="text-terracota-pale">pode começar aqui.</em>
+          </h2>
+          <p class="reveal d1 mt-8 text-lg text-papel/75">
+            Me mande uma mensagem. Sem compromisso: a gente conversa, você tira suas dúvidas e decide se faz sentido.
+          </p>
+          <a href="#" data-wa class="reveal d2 group mt-10 inline-flex items-center gap-4 bg-papel px-7 py-4 text-tinta transition hover:bg-terracota hover:text-papel">
+            Agendar minha primeira conversa <span class="arw"></span>
+          </a>
+          <p class="reveal d3 mt-6 text-[15px] text-papel/50">Resposta em até 24h úteis</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="py-14">
+    <div class="mx-auto flex max-w-6xl flex-col gap-6 px-6 text-[15px] text-tinta-mute md:flex-row md:items-center md:justify-between md:px-10">
+      <p><span class="font-display text-xl text-tinta">Paola Moura</span> · Psicóloga · CRP 00/00000</p>
+      <div class="flex gap-8">
+        <a href="https://www.instagram.com/casalemterapia" target="_blank" rel="noopener" class="transition hover:text-tinta">Instagram</a>
+        <a href="#" data-wa class="transition hover:text-tinta">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CTA fixo: barra no mobile, etiqueta no desktop -->
+  <a href="#" data-wa id="floatCta"
+     class="group fixed inset-x-0 bottom-0 z-40 flex ring-1 ring-papel/15 translate-y-[150%] items-center justify-between bg-tinta px-6 py-4 text-[15px] text-papel transition-transform duration-500 md:inset-x-auto md:bottom-8 md:right-8 md:gap-6">
+    Agendar conversa <span class="arw"></span>
+  </a>
+
+  <script>
+    // TODO: número real da Dra. Paola (formato 55 + DDD + número)
+    const WHATSAPP = '5500000000000';
+    const WA_MSGS = {
+      default:    'Olá, Paola! Vi seu site e gostaria de saber mais sobre a terapia.',
+      casal:      'Olá, Paola! Vi seu site e gostaria de saber mais sobre a terapia de casal.',
+      emdr:       'Olá, Paola! Vi seu site e gostaria de saber se a terapia EMDR é indicada para mim.',
+      individual: 'Olá, Paola! Vi seu site e gostaria de saber mais sobre a terapia individual.',
+    };
+
+    const PHRASES = [
+      { said: 'Você nunca me escuta.',  meant: 'Eu preciso sentir que sou importante para você.' },
+      { said: 'Você só pensa em você.', meant: 'Eu estou me sentindo sozinho nessa relação.' },
+      { said: 'Esquece, deixa pra lá.', meant: 'Tenho medo de que, se eu insistir, a gente brigue de novo.' },
+      { said: 'Você sempre faz isso.',  meant: 'Isso me machuca, e eu não sei te dizer sem explodir.' },
+      { said: 'Tanto faz.',             meant: 'Eu cansei de pedir e não ser atendido.' },
+      { said: 'Você não era assim.',    meant: 'Eu sinto falta de nós dois.' },
+    ];
+
+    const SIGNS = [
+      'Vocês conversam todos os dias, mas não têm uma conversa de verdade há meses.',
+      'Já dá para prever a briga inteira: quem começa, o que cada um diz, como termina.',
+      'Um cobra, o outro se fecha. Quanto mais um insiste, mais o outro some.',
+      'Algumas coisas já nem são ditas, para “não estragar o dia”.',
+      'Os filhos já sentem o clima antes de qualquer palavra.',
+    ];
+
+    const CYCLE = [
+      'Ele chega em casa e vai direto para o celular.',
+      '“Eu não sou prioridade para ele.”',
+      'Mágoa, que em segundos vira raiva.',
+      '“Você só liga pra esse celular!” Ele se fecha, e confirma o que ela pensava.',
+    ];
+
+    // --- WhatsApp
+    document.querySelectorAll('[data-wa]').forEach(a => {
+      const msg = WA_MSGS[a.dataset.wa] || WA_MSGS.default;
+      a.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+      a.target = '_blank'; a.rel = 'noopener';
+    });
+
+    // --- Header e CTA fixo
+    const header = document.getElementById('header');
+    const floatCta = document.getElementById('floatCta');
+    const finalCta = document.getElementById('agendar');
+    const onScroll = () => {
+      const solid = scrollY > 30;
+      header.classList.toggle('bg-papel/90', solid);
+      header.classList.toggle('backdrop-blur-md', solid);
+      const show = scrollY > innerHeight * 0.9 && finalCta.getBoundingClientRect().top > innerHeight * 0.85;
+      floatCta.classList.toggle('translate-y-[150%]', !show);
+      floatCta.classList.toggle('md:translate-y-[250%]', !show);
+    };
+    addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+    // --- Menu mobile
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const setMenu = open => {
+      mobileMenu.classList.toggle('hidden', !open); mobileMenu.classList.toggle('flex', open);
+      menuBtn.textContent = open ? 'Fechar' : 'Menu';
+      menuBtn.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+    menuBtn.addEventListener('click', () => setMenu(mobileMenu.classList.contains('hidden')));
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+
+    // --- Dicionário
+    const phrasesEl = document.getElementById('phrases');
+    const entryEmpty = document.getElementById('entryEmpty'), entryFull = document.getElementById('entryFull');
+    const saidEl = document.getElementById('said'), meantEl = document.getElementById('meant');
+    PHRASES.forEach(p => {
+      const b = document.createElement('button');
+      b.className = 'phrase border-l-2 border-papel/10 py-3 pl-6 text-left text-xl text-papel/60 transition hover:text-papel md:text-2xl';
+      b.setAttribute('aria-pressed', 'false');
+      b.textContent = `“${p.said}”`;
+      b.addEventListener('click', () => {
+        phrasesEl.querySelectorAll('.phrase').forEach(x => x.setAttribute('aria-pressed', 'false'));
+        b.setAttribute('aria-pressed', 'true');
+        saidEl.textContent = `“${p.said}”`;
+        meantEl.textContent = `“${p.meant}”`;
+        entryEmpty.classList.add('hidden'); entryFull.classList.remove('hidden');
+        meantEl.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 500, easing: 'ease-out' });
+        if (innerWidth < 1024) document.getElementById('entry').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      phrasesEl.appendChild(b);
+    });
+
+    // --- Checklist
+    const signsEl = document.getElementById('signs');
+    const signMsg = document.getElementById('signMsg');
+    SIGNS.forEach(s => {
+      const b = document.createElement('button');
+      b.className = 'sign flex w-full items-start gap-5 border-t border-tinta/15 py-5 text-left';
+      b.setAttribute('aria-pressed', 'false');
+      b.innerHTML = `<span class="box relative mt-1 h-[18px] w-[18px] shrink-0 border border-tinta/40 transition"></span>
+        <span class="sign-text text-lg text-tinta-soft transition">${s}</span>`;
+      b.addEventListener('click', () => {
+        b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+        const n = signsEl.querySelectorAll('[aria-pressed="true"]').length;
+        signMsg.textContent = n === 0 ? '' : n < 3
+          ? 'Respira. Isso não é sinal de que acabou.'
+          : 'Isso não é falta de amor. É sinal de que vocês entraram num ciclo.';
+      });
+      signsEl.appendChild(b);
+    });
+    signsEl.lastElementChild.classList.add('border-b');
+
+    // --- Ciclo (avança sozinho enquanto visível, até o usuário escolher uma etapa)
+    const tabs = [...document.querySelectorAll('.step-tab')];
+    const marker = document.getElementById('cycleMarker');
+    const cText = document.getElementById('cycleText');
+    let step = 0, angle = 0, auto, userTook = false;
+    const setStep = i => {
+      angle += ((i * 90 - angle) % 360 + 360) % 360;
+      step = i;
+      marker.style.transform = `rotate(${angle}deg)`;
+      tabs.forEach((t, j) => t.setAttribute('aria-selected', j === i));
+      cText.textContent = CYCLE[i];
+      cText.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500 });
+    };
+    tabs.forEach((t, i) => t.addEventListener('click', () => { userTook = true; clearInterval(auto); setStep(i); }));
+    setStep(0);
+    new IntersectionObserver(([e]) => {
+      clearInterval(auto);
+      if (e.isIntersecting && !userTook) auto = setInterval(() => setStep((step + 1) % 4), 3600);
+    }, { threshold: 0.35 }).observe(document.getElementById('ciclo'));
+
+    // --- Revelações no scroll
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal, h1').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
