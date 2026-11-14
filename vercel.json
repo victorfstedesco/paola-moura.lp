@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    { "source": "/v2.html", "destination": "/proposta-fechamento-tres-caminhos.html", "permanent": false },
+    { "source": "/v3.html", "destination": "/proposta-fechamento-tres-caminhos.html", "permanent": false },
+    { "source": "/v4.html", "destination": "/", "permanent": false },
+    { "source": "/v5.html", "destination": "/proposta-fechamento-tres-caminhos.html", "permanent": false },
+    { "source": "/v6.html", "destination": "/proposta-duvidas-por-trilha.html", "permanent": false }
+  ]
+}
